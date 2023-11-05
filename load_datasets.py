@@ -26,10 +26,6 @@ class LoadDatasets:
             magic, num, rows, cols = struct.unpack('>IIII', imgpath.read(16))
             test_images = np.fromfile(imgpath, dtype=np.uint8).reshape(len(test_labels), 784)
 
-        train_images = pd.DataFrame(train_images)
-        test_images = pd.DataFrame(test_images)
-        train_labels = pd.Series(train_labels)
-        test_labels = pd.Series(test_labels)
         return train_images, train_labels, test_images, test_labels
 
     def load_usps(self):
