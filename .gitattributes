@@ -1,0 +1,6 @@
+datasets/* filter=lfs diff=lfs merge=lfs -text
+datasets/** filter=lfs diff=lfs merge=lfs -text
+datasets/mnist/** filter=lfs diff=lfs merge=lfs -text
+datasets/usps/** filter=lfs diff=lfs merge=lfs -text
+datasets/letter/** filter=lfs diff=lfs merge=lfs -text
+datasets/caltech/** filter=lfs diff=lfs merge=lfs -text
