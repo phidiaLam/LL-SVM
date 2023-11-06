@@ -165,7 +165,7 @@ def train_test(X_train, y_train, X_test, y_test):
 
     svm = LinearSVMClassifier(batch_size=128, lamda=0.00001, lr_numerator_factor=1, lr_denominator_factor=100,
                               step_size=30)
-    svm.fit_eval(X_train, y_train, epoch=50)
+    svm.fit_eval(X_train, y_train, epoch=500)
     print("training finished.")
     y_predict = svm.predict(X_test)
 
@@ -174,17 +174,17 @@ def train_test(X_train, y_train, X_test, y_test):
     print("precision on test dataset: {}".format(precision_score(y_test, y_predict)))
 
     position_index = []
-    for i, v in range(y_predict):
+    for i, v in enumerate(y_predict):
         if v == 1:
             position_index.append(i)
 
     fig = plt.figure(figsize=(8, 8))
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
-    for i, v in range(position_index):
-        images = np.reshape(X_test[v], [28, 28])
+    for i, v in enumerate(position_index):
+        images = np.reshape(X_test[v], [16,16])
         ax = fig.add_subplot(6, 6, i + 1, xticks=[], yticks=[])
         ax.imshow(images, cmap=plt.cm.binary, interpolation='nearest')
         ax.text(0, 7, str(y_test[i]))
-        if i >= 36:
+        if i+1 >= 36:
             break
     plt.show()

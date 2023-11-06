@@ -16,7 +16,7 @@ def replace_number(labels, n):
 # init()
 if __name__ == '__main__':
     load = LoadDatasets()
-    X_train, y_train, X_test, y_test = load.load_mnist()
+    X_train, y_train, X_test, y_test = load.load_usps()
     y_train = np.where(y_train == 1, 1, -1)
     y_test = np.where(y_test == 1, 1, -1)
 
