@@ -1,28 +1,44 @@
-from core_algorithm import init, train_test
+import sys
+
+from algorithm_compute import train_test
+from core_algorithm import init
 from load_datasets import LoadDatasets
 import pandas as pd
 import numpy as np
 
 
-def replace_number(labels, n):
-    array = []
-    for index, value in enumerate(labels):
-        if value == n:
-            array.append(1.0)
-        else:
-            array.append(-1.0)
-    return array
 
 # init()
 if __name__ == '__main__':
     load = LoadDatasets()
-    X_train, y_train, X_test, y_test = load.load_usps()
-    y_train = np.where(y_train == 1, 1, -1)
-    y_test = np.where(y_test == 1, 1, -1)
+    dataset = sys.argv[1]
+    anchor_number = int(sys.argv[2])
+    if type(anchor_number)!=int or anchor_number<=0:
+        print("Anchor Number need integer")
+        exit(1)
+    print("start load datasets")
+    X_train, y_train, X_test, y_test = None, None, None, None
+    match dataset:
+        case 'mnist':
+            X_train, y_train, X_test, y_test = load.load_mnist()
+        case 'usps':
+            X_train, y_train, X_test, y_test = load.load_usps()
+        case 'letter':
+            X_train, y_train, X_test, y_test = load.load_letter()
+        case 'caltech':
+            X_train, y_train, X_test, y_test = load.load_caltech()
+        case _:
+            print("Can not found dataset")
+            exit(1)
+    train_test(X_train, y_train, X_test, y_test, anchor_number)
 
-    print(X_train)
-    print(y_train)
-    print(X_test)
-    print(y_test)
-
-    train_test(X_train, y_train, X_test, y_test)
+    # load = LoadDatasets()
+    # X_train, y_train, X_test, y_test = load.load_usps()
+    # y_train = np.where(y_train == 9, 1, -1)
+    # y_test = np.where(y_test == 9, 1, -1)
+    # print(X_train)
+    # print(y_train)
+    # print(X_test)
+    # print(y_test)
+    #
+    # train_test(X_train, y_train, X_test, y_test)
