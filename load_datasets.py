@@ -27,7 +27,7 @@ class LoadDatasets:
         return train_images, train_labels, test_images, test_labels
 
     def load_usps(self):
-        with h5py.File(os.path.dirname(os.path.abspath(__file__))+"./datasets/usps/usps.h5", 'r') as hf:
+        with h5py.File(os.path.dirname(os.path.abspath(__file__))+"/datasets/usps/usps.h5", 'r') as hf:
             train = hf.get('train')
             train_images = train.get('data')[:]
             train_labels = train.get('target')[:]
