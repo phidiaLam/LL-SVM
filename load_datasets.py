@@ -91,11 +91,12 @@ class LoadDatasets:
 
         # Perform train-test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+        X_test = X_test.reshape(X_test.shape[0], X_test.shape[1]*X_test.shape[2]*X_test.shape[3])
+        X_train = X_train.reshape(X_train.shape[0], X_train.shape[1]*X_train.shape[2]*X_train.shape[3])
         return X_train, y_train, X_test,  y_test
 
 
-def load_and_preprocess_image(image_path, target_size=(128, 128)):
+def load_and_preprocess_image(image_path, target_size=(28, 28)):
     image = Image.open(image_path)
     image = image.convert('RGB')
     image = np.array(image, dtype=np.float32)
