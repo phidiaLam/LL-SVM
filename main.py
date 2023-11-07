@@ -9,7 +9,11 @@ import numpy as np
 
 if __name__ == '__main__':
     load = LoadDatasets()
-    load.load_caltech()
+    X_train, y_train, X_test,  y_test = load.load_caltech()
+    print(X_train)
+    print(y_train)
+    print(X_test)
+    print(y_test)
     # dataset = sys.argv[1]
     # anchor_number = int(sys.argv[2])
     # if type(anchor_number)!=int or anchor_number<=0:
