@@ -35,7 +35,7 @@ def train_test(X_train, y_train, X_test, y_test, anchor_number):
         fig = plt.figure(figsize=(8, 8))
         fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
         for i, v in enumerate(position_index):
-            images = np.reshape(X_test[v], [16, 16])
+            images = np.reshape(X_test[v], [28, 28])
             ax = fig.add_subplot(6, 6, i + 1, xticks=[], yticks=[])
             ax.imshow(images, cmap=plt.cm.binary, interpolation='nearest')
             ax.text(0, 7, str(y_test[v]))

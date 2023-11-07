@@ -1,7 +1,6 @@
 import sys
 
 from algorithm_compute import train_test
-from core_algorithm import init
 from load_datasets import LoadDatasets
 import pandas as pd
 import numpy as np
