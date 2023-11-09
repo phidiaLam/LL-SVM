@@ -96,7 +96,7 @@ class LoadDatasets:
         return X_train, y_train, X_test,  y_test
 
 
-def load_and_preprocess_image(image_path, target_size=(28, 28)):
+def load_and_preprocess_image(image_path, target_size=(64, 64)):
     image = Image.open(image_path)
     image = image.convert('RGB')
     image = np.array(image, dtype=np.float32)
