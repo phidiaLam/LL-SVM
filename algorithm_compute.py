@@ -2,6 +2,7 @@ import asyncio
 import math
 
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, f1_score
 from sklearn.model_selection import train_test_split
@@ -42,11 +43,7 @@ def test(param):
     return predict, v
 
 
-def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0, dataset_name):
-    logger.debug(
-        "dataset:{}, epoch:{},lamda:{},archor:{},skip:{},t0:{}".format(dataset_name, epoch, lamda, anchor_number, skip,
-                                                                       t0))
-
+def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0):
     X_train = MinMaxScaler().fit_transform(X_train)
     X_test = MinMaxScaler().fit_transform(X_test)
 
@@ -142,3 +139,50 @@ def moon_train(anchor_number):
     predict = np.where(predict >= 0, 1, -1)
 
     print("accuracy is {}".format(accuracy_score(y_test, predict)))
+
+def banana_train(anchor_number):
+    dataset = pd.read_csv("./datasets/banana/banana.csv",sep=",")
+
+    X, y = dataset[['At1','At2']].values, dataset.Class.values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+
+    feature_1, feature_2 = np.meshgrid(
+        np.linspace(X[:, 0].min(), X[:, 0].max()),
+        np.linspace(X[:, 1].min(), X[:, 1].max())
+    )
+
+    grid = np.vstack([feature_1.ravel(), feature_2.ravel()]).T
+
+    local_coding = LocalCoding(X_train, y_train, anchor_number)
+    anchors = local_coding.get_anchor()
+    svm = LocallyLinearSVMClassifier(lamda=0.001, anchor_number=anchor_number, skip=10, t0=10,
+                                     local_coding_model=local_coding)
+    svm.fit(X_train, y_train, epoch=500000)
+    predict = []
+    for j in range(0, len(grid)):
+        predict.append(svm.predict(grid[j])[0][0])
+    predict = np.array(predict)
+    predict = np.where(predict >= 0, 1, -1)
+    y_pred = np.reshape(predict, feature_1.shape)
+
+    display = DecisionBoundaryDisplay(
+        xx0=feature_1, xx1=feature_2, response=y_pred
+    )
+    display.plot()
+    display.ax_.scatter(
+        X_test[:, 0], X_test[:, 1], c=y_test, edgecolor="black"
+    )
+    display.ax_.scatter(
+        anchors[:, 0], anchors[:, 1], c='green', edgecolor="pink"
+    )
+    plt.title('ll-svm')
+    plt.show()
+
+    predict = []
+    for j in range(0, len(X_test)):
+        predict.append(svm.predict(X_test[j])[0][0])
+    predict = np.array(predict)
+    predict = np.where(predict >= 0, 1, -1)
+
+    print("accuracy is {}".format(accuracy_score(y_test, predict)))
+
