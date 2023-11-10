@@ -55,7 +55,7 @@ def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, sk
     params_train = []
     for i, v in enumerate(labels):
         params_train.append((X_train, y_train, anchor_number, v, epoch, lamda, skip, t0))
-    with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ProcessPoolExecutor() as executor:
         train_results = list(executor.map(train, params_train))
     train_end_time = time.time()
     logger.info("Training time:" + str(train_end_time - train_start_time) + "s")
@@ -71,7 +71,7 @@ def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, sk
     params_test = []
     for i, v in enumerate(labels):
         params_test.append((map_train[v], X_test, y_test, v))
-    with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ProcessPoolExecutor() as executor:
         test_results = list(executor.map(test, params_test))
 
     map_test = {}
@@ -94,7 +94,7 @@ def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, sk
 
 
 def moon_train(anchor_number):
-    dataset = make_circles(n_samples=1000, noise=0.05)
+    dataset = make_moons(n_samples=1000, noise=0.2)
 
     X, y = dataset[0], dataset[1]
     y = np.where(y == 1, 1, -1)
