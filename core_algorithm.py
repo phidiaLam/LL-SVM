@@ -1,12 +1,6 @@
 import pandas as pd
 import numpy as np
-from mlpack import local_coordinate_coding
 import random
-
-
-def train_local_coding(X_train, anchor_number):
-    output = local_coordinate_coding(training=X_train, atoms=anchor_number, lambda_=0.0001, max_iterations=10)
-    return output['output_model']
 
 class LocallyLinearSVMClassifier():
     # Locally Linear SVM with SGD
@@ -18,11 +12,6 @@ class LocallyLinearSVMClassifier():
         self.skip = skip
         self.t0 = t0
         self.local_coding_model = local_coding_model
-    def use_local_coding(self, data):
-        result = local_coordinate_coding(input_model=self.local_coding_model, test=data)
-        coding = result['codes']
-        coding = coding / np.sum(coding)
-        return coding.T
 
     def fit(self, X_train, y_train, epoch):
         feature_dim = X_train.shape[1]
@@ -31,7 +20,7 @@ class LocallyLinearSVMClassifier():
         count = self.skip
         for e in range(epoch):
             i = random.randint(0,X_train.shape[0]-1)
-            gamme = self.use_local_coding([X_train[i]])
+            gamme = self.local_coding_model.fit(X_train[i])
             Ht = 1 - y_train[i] * (np.dot(np.dot(gamme.T,self.w),X_train[i])+np.dot(gamme.T,self.b))
             if Ht > 0:
                 self.w = self.w + 1 / (self.lamda * (e + self.t0)) * y_train[i] * (np.dot(X_train[i].reshape(-1,1),gamme.T)).T
@@ -42,5 +31,5 @@ class LocallyLinearSVMClassifier():
                 count = self.skip
 
     def predict(self, test):
-        gamme = self.use_local_coding([test])
+        gamme = self.local_coding_model.fit(test)
         return np.dot(np.dot(gamme.T,self.w),test)+np.dot(gamme.T,self.b)
