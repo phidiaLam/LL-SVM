@@ -7,10 +7,11 @@ if __name__ == '__main__':
     load = LoadDatasets()
     dataset = sys.argv[1]
     anchor_number = int(sys.argv[2])
-    epoch = int(sys.argv[3])
-    lamda = float(sys.argv[4])
-    skip = float(sys.argv[5])
-    t0 = float(sys.argv[6])
+    if dataset != "moon" and dataset != "banana":
+        epoch = int(sys.argv[3])
+        lamda = float(sys.argv[4])
+        skip = float(sys.argv[5])
+        t0 = float(sys.argv[6])
     if type(anchor_number)!=int or anchor_number<=0:
         print("Anchor Number need integer")
         exit(1)
