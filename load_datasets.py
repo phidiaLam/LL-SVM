@@ -1,13 +1,13 @@
 import os
 import numpy as np
 import struct
-import pandas as pd
 import h5py
 from functools import reduce
 from PIL import Image
 import cv2
 
 from sklearn.model_selection import train_test_split
+
 '''
 Load the data sets from file
 return: X_train, y_train, X_test, y_test
@@ -15,10 +15,14 @@ return: X_train, y_train, X_test, y_test
 class LoadDatasets:
     def load_mnist(self):
         print("start load mnist dataset")
-        train_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/', 'train-labels.idx1-ubyte')
-        train_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/', 'train-images.idx3-ubyte')
-        test_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/', 't10k-labels.idx1-ubyte')
-        test_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/', 't10k-images.idx3-ubyte')
+        train_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/',
+                                                                                      'train-labels.idx1-ubyte')
+        train_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/',
+                                                                                      'train-images.idx3-ubyte')
+        test_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/',
+                                                                                     't10k-labels.idx1-ubyte')
+        test_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/mnist/',
+                                                                                     't10k-images.idx3-ubyte')
         with open(train_labels_path, 'rb') as lbpath:
             magic, n = struct.unpack('>II', lbpath.read(8))
             train_labels = np.fromfile(lbpath, dtype=np.uint8)
@@ -36,7 +40,7 @@ class LoadDatasets:
 
     def load_usps(self):
         print("start load usps dataset")
-        with h5py.File(os.path.dirname(os.path.abspath(__file__))+"/datasets/usps/usps.h5", 'r') as hf:
+        with h5py.File(os.path.dirname(os.path.abspath(__file__)) + "/datasets/usps/usps.h5", 'r') as hf:
             train = hf.get('train')
             train_images = train.get('data')[:]
             train_labels = train.get('target')[:]
@@ -44,17 +48,21 @@ class LoadDatasets:
             test_images = test.get('data')[:]
             test_labels = test.get('target')[:]
 
-            train_images = train_images.reshape(train_images.shape[0], reduce(lambda a, b: a * b, train_images.shape[1:]))
+            train_images = train_images.reshape(train_images.shape[0],
+                                                reduce(lambda a, b: a * b, train_images.shape[1:]))
             test_images = test_images.reshape(test_images.shape[0], reduce(lambda a, b: a * b, test_images.shape[1:]))
         return train_images, train_labels, test_images, test_labels
 
-
     def load_letter(self):
         print("start load letter dataset")
-        train_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/', 'emnist-letters-train-labels-idx1-ubyte')
-        train_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/', 'emnist-letters-train-images-idx3-ubyte')
-        test_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/', 'emnist-letters-test-labels-idx1-ubyte')
-        test_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/', 'emnist-letters-test-images-idx3-ubyte')
+        train_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/',
+                                                                                      'emnist-letters-train-labels-idx1-ubyte')
+        train_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/',
+                                                                                      'emnist-letters-train-images-idx3-ubyte')
+        test_labels_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/',
+                                                                                     'emnist-letters-test-labels-idx1-ubyte')
+        test_images_path = os.path.dirname(os.path.abspath(__file__)) + os.path.join('/datasets/letter/',
+                                                                                     'emnist-letters-test-images-idx3-ubyte')
         with open(train_labels_path, 'rb') as lbpath:
             magic, n = struct.unpack('>II', lbpath.read(8))
             train_labels = np.fromfile(lbpath, dtype=np.uint8)
@@ -68,9 +76,7 @@ class LoadDatasets:
             magic, num, rows, cols = struct.unpack('>IIII', imgpath.read(16))
             test_images = np.fromfile(imgpath, dtype=np.uint8).reshape(len(test_labels), 784)
 
-
         return train_images, train_labels, test_images, test_labels
-
 
     def load_caltech(self):
         data = []
@@ -93,9 +99,9 @@ class LoadDatasets:
         # Perform train-test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         # reshape r,g,b to 3-D
-        X_test = X_test.reshape(X_test.shape[0], X_test.shape[1]*X_test.shape[2]*X_test.shape[3])
-        X_train = X_train.reshape(X_train.shape[0], X_train.shape[1]*X_train.shape[2]*X_train.shape[3])
-        return X_train, y_train, X_test,  y_test
+        X_test = X_test.reshape(X_test.shape[0], X_test.shape[1] * X_test.shape[2] * X_test.shape[3])
+        X_train = X_train.reshape(X_train.shape[0], X_train.shape[1] * X_train.shape[2] * X_train.shape[3])
+        return X_train, y_train, X_test, y_test
 
 
 def load_and_preprocess_image(image_path, target_size=(64, 64)):

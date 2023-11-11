@@ -1,6 +1,3 @@
-import asyncio
-import math
-
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -18,6 +15,7 @@ from logging_conf import logger_config
 
 logger = logger_config(log_path='log.log')
 
+
 def train(param):
     X_train, y_train, anchor_number, label, epoch, lamda, skip, t0 = param
     logger.info("start:{}".format(label))
@@ -30,6 +28,7 @@ def train(param):
 
     return label, svm
 
+
 def test(param):
     svm, X_test, y_test, v = param
     predict = []
@@ -39,7 +38,7 @@ def test(param):
     predict_tmp = np.where(predict >= 0, 1, -1)
     y_test_tmp = np.where(y_test == v, 1, -1)
     logger.info("For label: {}, precision: {}, f1-measure: {}".format(v, precision_score(y_test_tmp, predict_tmp),
-                                                                f1_score(y_test_tmp, predict_tmp)))
+                                                                      f1_score(y_test_tmp, predict_tmp)))
     return predict, v
 
 
@@ -140,10 +139,11 @@ def moon_train(anchor_number):
 
     print("accuracy is {}".format(accuracy_score(y_test, predict)))
 
-def banana_train(anchor_number):
-    dataset = pd.read_csv("./datasets/banana/banana.csv",sep=",")
 
-    X, y = dataset[['At1','At2']].values, dataset.Class.values
+def banana_train(anchor_number):
+    dataset = pd.read_csv("./datasets/banana/banana.csv", sep=",")
+
+    X, y = dataset[['At1', 'At2']].values, dataset.Class.values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
     feature_1, feature_2 = np.meshgrid(
@@ -185,4 +185,3 @@ def banana_train(anchor_number):
     predict = np.where(predict >= 0, 1, -1)
 
     print("accuracy is {}".format(accuracy_score(y_test, predict)))
-

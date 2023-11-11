@@ -18,8 +18,6 @@ class LocalCoding:
         else:
             self.anchor = kmeans_pos.cluster_centers_
 
-
-
     def get_anchor(self):
         return self.anchor
 
