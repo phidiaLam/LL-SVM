@@ -32,4 +32,4 @@ class LocallyLinearSVMClassifier():
 
     def predict(self, test):
         gamma = self.local_coding_model.fit(test)
-        return np.dot(np.dot(gamme.T, self.w), test) + np.dot(gamma.T, self.b)
+        return np.dot(np.dot(gamma.T, self.w), test) + np.dot(gamma.T, self.b)
