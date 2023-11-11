@@ -28,4 +28,4 @@ class LocalCoding:
         reciprocal_distances_sum = np.sum(1 / (distances + 0.000000001))
         similarities = (1 / (distances + 0.000000001)) / reciprocal_distances_sum
 
-        return similarities.reshape(-1,1)
+        return similarities.reshape(-1, 1)

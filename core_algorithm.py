@@ -20,16 +20,16 @@ class LocallyLinearSVMClassifier():
         count = self.skip
         for e in range(epoch):
             i = random.randint(0,X_train.shape[0]-1)
-            gamme = self.local_coding_model.fit(X_train[i])
-            Ht = 1 - y_train[i] * (np.dot(np.dot(gamme.T,self.w),X_train[i])+np.dot(gamme.T,self.b))
+            gamma = self.local_coding_model.fit(X_train[i])
+            Ht = 1 - y_train[i] * (np.dot(np.dot(gamma.T,self.w),X_train[i])+np.dot(gamma.T,self.b))
             if Ht > 0:
-                self.w = self.w + 1 / (self.lamda * (e + self.t0)) * y_train[i] * (np.dot(X_train[i].reshape(-1,1),gamme.T)).T
-                self.b = self.b + 1 / (self.lamda * (e + self.t0)) * y_train[i] * gamme
+                self.w = self.w + 1 / (self.lamda * (e + self.t0)) * y_train[i] * (np.dot(X_train[i].reshape(-1,1),gamma.T)).T
+                self.b = self.b + 1 / (self.lamda * (e + self.t0)) * y_train[i] * gamma
             count = count - 1
             if count <= 0:
                 self.w = self.w*(1-self.skip / (e + self.t0))
                 count = self.skip
 
     def predict(self, test):
-        gamme = self.local_coding_model.fit(test)
-        return np.dot(np.dot(gamme.T,self.w),test)+np.dot(gamme.T,self.b)
+        gamma = self.local_coding_model.fit(test)
+        return np.dot(np.dot(gamme.T,self.w),test)+np.dot(gamma.T,self.b)

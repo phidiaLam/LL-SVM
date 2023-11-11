@@ -71,6 +71,7 @@ class LoadDatasets:
 
         return train_images, train_labels, test_images, test_labels
 
+
     def load_caltech(self):
         data = []
         dataset_directory = os.path.dirname(os.path.abspath(__file__)) + '/datasets/caltech'
@@ -91,6 +92,7 @@ class LoadDatasets:
 
         # Perform train-test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        # reshape r,g,b to 3-D
         X_test = X_test.reshape(X_test.shape[0], X_test.shape[1]*X_test.shape[2]*X_test.shape[3])
         X_train = X_train.reshape(X_train.shape[0], X_train.shape[1]*X_train.shape[2]*X_train.shape[3])
         return X_train, y_train, X_test,  y_test
