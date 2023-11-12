@@ -103,7 +103,7 @@ def moon_train(anchor_number):
 
     grid = np.vstack([feature_1.ravel(), feature_2.ravel()]).T
 
-    local_coding = LocalCoding(X_train, y_train, anchor_number)
+    local_coding = LocalCoding(X_train, y_train, anchor_number, 8)
     anchors = local_coding.get_anchor()
     svm = LocallyLinearSVMClassifier(lamda=0.001, anchor_number=anchor_number, skip=10, t0=10,
                                      local_coding_model=local_coding)
@@ -150,7 +150,7 @@ def banana_train(anchor_number):
 
     grid = np.vstack([feature_1.ravel(), feature_2.ravel()]).T
 
-    local_coding = LocalCoding(X_train, y_train, anchor_number)
+    local_coding = LocalCoding(X_train, y_train, anchor_number, 8)
     anchors = local_coding.get_anchor()
     svm = LocallyLinearSVMClassifier(lamda=0.001, anchor_number=anchor_number, skip=10, t0=10,
                                      local_coding_model=local_coding)
