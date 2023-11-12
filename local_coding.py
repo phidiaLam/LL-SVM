@@ -3,7 +3,8 @@ from sklearn.cluster import KMeans
 
 
 class LocalCoding:
-    def __init__(self, x_value, y_value, anchor_number):
+    def __init__(self, x_value, y_value, anchor_number, nearest_number):
+        self.nearest_number = nearest_number
         x_pos = x_value[y_value == 1]
         x_neg = x_value[y_value == -1]
         pos_number = round(anchor_number / x_value.shape[0] * x_pos.shape[0])
@@ -23,7 +24,14 @@ class LocalCoding:
 
     def fit(self, x):
         distances = np.linalg.norm(self.anchor - x, axis=1)
-        reciprocal_distances_sum = np.sum(1 / (distances + 0.000000001))
-        similarities = (1 / (distances + 0.000000001)) / reciprocal_distances_sum
+        min_indices = np.arange(distances.shape[0])
+        if distances.shape[0] > self.nearest_number:
+            min_indices = np.argpartition(distances[0:], self.nearest_number)[:self.nearest_number]
+        min_values = distances[min_indices]
+        reciprocal_values = 1 / min_values
+        normalized_values = (reciprocal_values - np.min(reciprocal_values)) / (
+                    np.max(reciprocal_values) - np.min(reciprocal_values))
+        similarities = np.zeros_like(distances)
+        similarities[min_indices] = normalized_values
 
         return similarities.reshape(-1, 1)

@@ -12,6 +12,7 @@ if __name__ == '__main__':
         lamda = float(sys.argv[4])
         skip = float(sys.argv[5])
         t0 = float(sys.argv[6])
+        nearest_number = int(sys.argv[7])
     if type(anchor_number)!=int or anchor_number<=0:
         print("Anchor Number need integer")
         exit(1)
@@ -36,6 +37,6 @@ if __name__ == '__main__':
         case _:
             print("Can not found dataset")
             exit(1)
-    train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0)
+    train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0, nearest_number)
 
 

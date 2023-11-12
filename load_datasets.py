@@ -62,7 +62,7 @@ class LoadDatasets:
 
         X, y = dataset[['xbox', 'ybox', 'width', 'height', 'onpix', 'xbar', 'ybar', 'x2bar', 'y2bar', 'xybar', 'x2ybar',
                         'xy2bar', 'xedge', 'xedgey', 'yedge', 'yedgex']].values, dataset.letter.values
-        train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.1)
+        train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.2, random_state=1)
 
         return train_images, train_labels, test_images, test_labels
 

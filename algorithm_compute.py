@@ -17,10 +17,10 @@ logger = logger_config(log_path='log.log')
 
 
 def train(param):
-    X_train, y_train, anchor_number, label, epoch, lamda, skip, t0 = param
+    X_train, y_train, anchor_number, label, epoch, lamda, skip, t0, nearest_number = param
     logger.info("start:{}".format(label))
     y_train_each = np.where(y_train == label, 1, -1)
-    local_coding = LocalCoding(X_train, y_train_each, anchor_number)
+    local_coding = LocalCoding(X_train, y_train_each, anchor_number, nearest_number)
     svm = LocallyLinearSVMClassifier(lamda=0.001, anchor_number=anchor_number, skip=skip, t0=t0,
                                      local_coding_model=local_coding)
     svm.fit(X_train, y_train_each, epoch=epoch)
@@ -42,10 +42,7 @@ def test(param):
     return predict, v
 
 
-def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0):
-    X_train = MinMaxScaler().fit_transform(X_train)
-    X_test = MinMaxScaler().fit_transform(X_test)
-
+def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, skip, t0, nearest_number):
     labels = np.unique(y_train)
 
     # Training
@@ -53,7 +50,7 @@ def train_test(X_train, y_train, X_test, y_test, anchor_number, epoch, lamda, sk
     train_start_time = time.time()
     params_train = []
     for i, v in enumerate(labels):
-        params_train.append((X_train, y_train, anchor_number, v, epoch, lamda, skip, t0))
+        params_train.append((X_train, y_train, anchor_number, v, epoch, lamda, skip, t0, nearest_number))
     with concurrent.futures.ProcessPoolExecutor() as executor:
         train_results = list(executor.map(train, params_train))
     train_end_time = time.time()
